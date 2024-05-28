@@ -1,74 +1,115 @@
-import 'user.dart';
-import 'activite.dart';
+import 'User.dart';  // Assuming User is defined in user.dart
+import 'Activite.dart';  // Assuming Activite is defined in activite.dart
 
 class Voyage {
   final int id;
-  final String destination;
-  final String description;
+  final String nomVoyage;
+  final String lieux;
+  final double budget;
   final DateTime startDate;
   final DateTime endDate;
-  final int creator_id;  // Le créateur du voyage
-  final double budget;
-  final List<User> guests;  // Liste des invités du voyage
-  final List<Activite> activites;  // Liste des activités du voyage
+  final int creatorId;
+  final String img;
+  final String tag;
+  final List<User> guests;
+  final List<Activite> activites;
 
   Voyage({
     required this.id,
-    required this.destination,
-    required this.description,
+    required this.nomVoyage,
+    required this.lieux,
+    required this.budget,
     required this.startDate,
     required this.endDate,
-    required this.creator_id,
-    required this.budget,
-    this.guests = const [],
-    this.activites = const [],
-  });
+    required this.creatorId,
+    required this.tag,
+    required this.img,
+    List<User>? guests,
+    List<Activite>? activites,
+  }) : guests = guests ?? [],
+        activites = activites ?? [];
 
   Voyage copyWith({
     int? id,
-    String? destination,
-    String? description,
+    String? nomVoyage,
+    String? lieux,
+    double? budget,
     DateTime? startDate,
     DateTime? endDate,
-    int? creator_id,
-    double? budget,
+    int? creatorId,
+    String? img,
+    String? tag,
     List<User>? guests,
     List<Activite>? activites,
   }) {
     return Voyage(
       id: id ?? this.id,
-      destination: destination ?? this.destination,
-      description: description ?? this.description,
+      nomVoyage: nomVoyage ?? this.nomVoyage,
+      lieux: lieux ?? this.lieux,
+      budget: budget ?? this.budget,
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
-      creator_id: creator_id ?? this.creator_id,
-      budget: budget ?? this.budget,
+      creatorId: creatorId ?? this.creatorId,
+      img: img ?? this.img,
+      tag: tag ?? this.tag,
       guests: guests ?? this.guests,
       activites: activites ?? this.activites,
-
     );
   }
 
   factory Voyage.fromJson(Map<String, dynamic> json) {
-    return Voyage(
-      id: json['id_voyage'],
-      destination: json['destination'],
-      description: json['description'],
-      startDate: DateTime.parse(json['startDate']),
-      endDate: DateTime.parse(json['endDate']),
-      creator_id: json['creator_id'],
-      budget: json['budget'],
+    // Extraction sécurisée de la liste des activités, gère le cas où 'activites' est null
+    var activitesList = json['activites'] as List? ?? [];
+    List<Activite> activiteList = activitesList.map((dynamic item) => Activite.fromJson(item as Map<String, dynamic>)).toList();
 
+    // Extraction sécurisée de la liste des invités, gère le cas où 'guests' est null
+    var guestsList = json['guests'] as List? ?? [];
+    List<User> guestList = guestsList.map((dynamic item) => User.fromJson(item as Map<String, dynamic>)).toList();
+
+    return Voyage(
+      id: json['id_voyage'] as int,
+      nomVoyage: json['nom_voyage'] as String,
+      lieux: json['lieux'] as String,
+      budget: (json['budget'] as num).toDouble(),
+      startDate: DateTime.parse(json['date_debut'] as String),
+      endDate: DateTime.parse(json['date_fin'] as String),
+      creatorId: json['creator_id'] as int,
+      tag: json['tag'] as String,
+      img: json['img'] as String,
+      guests: guestList,
+      activites: activiteList,
     );
   }
 
+
   Map<String, dynamic> toJson() {
     return {
-      'nom_voyage': destination,
-      'description': description,
-      'startDate': startDate.toIso8601String(),
-      'endDate': endDate.toIso8601String(),
+      'id_voyage': id,
+      'nom_voyage': nomVoyage,
+      'lieux': lieux,
       'budget': budget,
+      'date_debut': startDate.toIso8601String(),
+      'date_fin': endDate.toIso8601String(),
+      'creator_id': creatorId,
+      'img': img,
+      'tag': tag,
+      'guests': guests.map((user) => user.toJson()).toList(),
+      'activites': activites.map((activite) => activite.toJson()).toList(),
+    };
+  }
+
+  Map<String, dynamic> toJsonCreate() {
+    return {
+      'nom_voyage': nomVoyage,
+      'lieux': lieux,
+      'budget': budget,
+      'date_debut': startDate.toIso8601String(),
+      'date_fin': endDate.toIso8601String(),
+      'creator_id': creatorId,
+      'img': img,
+      'tag': tag,
+      'guests': guests.map((user) => user.toJson()).toList(),
+      'activites': activites.map((activite) => activite.toJson()).toList(),
     };
   }
 }

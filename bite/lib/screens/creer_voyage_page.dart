@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-import '../models/voyage.dart';  // Assurez-vous d'importer votre modèle Voyage
-import '../service/voyage_service.dart';  // Importez votre service de gestion des voyages
+import 'dart:convert';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import '../models/Voyage.dart';
+import '../service/voyage_service.dart';
+import 'mon_voyage.dart'; // Assurez-vous d'importer la page MonVoyagePage
 
 class CreerVoyagePage extends StatefulWidget {
   @override
@@ -11,12 +15,35 @@ class _CreerVoyagePageState extends State<CreerVoyagePage> {
   DateTime selectedStartDate = DateTime.now();
   DateTime selectedEndDate = DateTime.now();
   double budget = 0;
-  String selectedTag = 'Aventure';
-  String selectedHousing = 'Maison';
-  final voyageService = VoyageService();  // Instance de VoyageService
-  final List<String> tags = ['Aventure', 'Détente', 'Culture', 'Sport', 'Nature'];
-  final List<String> housingTypes = ['Maison', 'Cabane', 'Caravane', 'Tente', 'Appartement'];
-  String lieuDepart = 'sordogne';
+  String nomVoyage = '';
+  String lieuDepart = '';
+  String base64Image = '';
+  File? imageFile;
+  String? selectedTag;
+  List<String> tags = [];
+  final int creatorId = 1;
+  final voyageService = VoyageService();
+  final picker = ImagePicker();
+
+  @override
+  void initState() {
+    super.initState();
+    loadTags();
+  }
+
+  void loadTags() async {
+    try {
+      tags = await voyageService.getTagVoyage();
+      if (tags.isNotEmpty) {
+        setState(() {
+          selectedTag = tags[0];
+        });
+      }
+    } catch (e) {
+      print('Failed to load tags: $e');
+    }
+  }
+
   Future<void> _selectDate(BuildContext context, bool isStart) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -24,7 +51,7 @@ class _CreerVoyagePageState extends State<CreerVoyagePage> {
       firstDate: DateTime(2020),
       lastDate: DateTime(2030),
     );
-    if (picked != null && picked != (isStart ? selectedStartDate : selectedEndDate))
+    if (picked != null) {
       setState(() {
         if (isStart) {
           selectedStartDate = picked;
@@ -32,6 +59,63 @@ class _CreerVoyagePageState extends State<CreerVoyagePage> {
           selectedEndDate = picked;
         }
       });
+    }
+  }
+
+  Future<void> pickImage() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      File imageFile = File(pickedFile.path);
+      List<int> imageBytes = await imageFile.readAsBytes();
+      String base64Encode = base64.encode(imageBytes);
+      setState(() {
+        this.imageFile = imageFile;
+        base64Image = base64Encode;
+      });
+    }
+  }
+
+  Future<void> _submitVoyage() async {
+    var newVoyage = Voyage(
+      id: 1, // Exemple d'id, remplacez par la logique réelle pour générer l'id
+      nomVoyage: nomVoyage,
+      lieux: lieuDepart,
+      budget: budget,
+      startDate: selectedStartDate,
+      endDate: selectedEndDate,
+      creatorId: creatorId,
+      img: base64Image,
+      guests: [],
+      activites: [],
+      tag: selectedTag ?? 'Default Tag',
+    );
+    try {
+      final response = await voyageService.addVoyage(newVoyage.toJsonCreate());
+      if (response.statusCode != 500) {
+
+        final responseData = response.data as Map<String, dynamic>;
+        final int idVoyage = responseData['id_voyage'] as int;
+        print(idVoyage);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MonVoyagePage(voyageId: idVoyage),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Erreur lors de la création du voyage: ${response.statusCode}'),
+          backgroundColor: Colors.red,
+        ));
+      }
+    } catch (e , stacktrace) {
+      print('$e et $stacktrace ');
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Erreur lors de la création du voyage: $e'),
+        backgroundColor: Colors.red,
+      ));
+    }
   }
 
   @override
@@ -43,7 +127,25 @@ class _CreerVoyagePageState extends State<CreerVoyagePage> {
       body: ListView(
         padding: EdgeInsets.all(16.0),
         children: <Widget>[
-          // Date Picker
+          GestureDetector(
+            onTap: pickImage,
+            child: Container(
+              height: 200,
+              color: Colors.grey[300],
+              child: imageFile == null
+                  ? Center(child: Text('Tap to select an image'))
+                  : Image.file(imageFile!),
+            ),
+          ),
+          SizedBox(height: 16.0),
+          TextField(
+            decoration: InputDecoration(labelText: 'Nom du voyage'),
+            onChanged: (value) => nomVoyage = value,
+          ),
+          TextField(
+            decoration: InputDecoration(labelText: 'Lieu de départ'),
+            onChanged: (value) => lieuDepart = value,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
@@ -59,19 +161,6 @@ class _CreerVoyagePageState extends State<CreerVoyagePage> {
               ),
             ],
           ),
-          // Lieu de départ
-          TextField(
-            decoration: InputDecoration(
-              labelText: 'Lieu de départ',
-            ),
-          ),
-          // Lieu d'arrivée
-          TextField(
-            decoration: InputDecoration(
-              labelText: 'Lieu d\'arrivée',
-            ),
-          ),
-          // Slider pour le budget
           ListTile(
             title: Text('Budget: \$${budget.toInt()}'),
             subtitle: Slider(
@@ -86,14 +175,21 @@ class _CreerVoyagePageState extends State<CreerVoyagePage> {
               },
             ),
           ),
-          // Dropdown pour les tags
           DropdownButton<String>(
-            isExpanded: true,
-            value: selectedTag,
-            onChanged: (newValue) {
-              setState(() {
-                selectedTag = newValue!;
-              });
+            value: selectedTag ?? 'Default Tag',
+            icon: const Icon(Icons.arrow_downward),
+            elevation: 16,
+            style: const TextStyle(color: Colors.deepPurple),
+            underline: Container(
+              height: 2,
+              color: Colors.deepPurpleAccent,
+            ),
+            onChanged: (String? newValue) {
+              if (newValue != null) {
+                setState(() {
+                  selectedTag = newValue;
+                });
+              }
             },
             items: tags.map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
@@ -102,44 +198,9 @@ class _CreerVoyagePageState extends State<CreerVoyagePage> {
               );
             }).toList(),
           ),
-          // Dropdown pour le type d'habitation
-          DropdownButton<String>(
-            isExpanded: true,
-            value: selectedHousing,
-            onChanged: (newValue) {
-              setState(() {
-                selectedHousing = newValue!;
-              });
-            },
-            items: housingTypes.map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-          ),
-          // Bouton de soumission
+          SizedBox(height: 16.0),
           ElevatedButton(
-            onPressed: () async {
-              // Création de l'objet voyage
-              final voyage = Voyage(
-                  id: 0,
-                  destination: lieuDepart,  // Utilisation du lieu de départ pour la destination
-                  description: selectedTag,  // Utilisation du tag comme description
-                  startDate: selectedStartDate,
-                  endDate: selectedEndDate,
-                  creator_id: 0,  // Vous devrez spécifier l'ID du créateur
-                  budget: budget,
-                  guests: [],  // Liste initialement vide, peut être mise à jour plus tard
-                  activites: []  // Liste initialement vide, peut être mise à jour plus tard
-              );
-              try {
-                // Envoi de l'objet voyage au service pour ajout via l'API
-                await voyageService.addVoyage(voyage.toJson());
-              } catch (e) {
-                print('Erreur lors de l\'ajout du voyage: $e');
-              }
-            },
+            onPressed: _submitVoyage,
             child: Text('Crée mon voyage'),
           ),
         ],

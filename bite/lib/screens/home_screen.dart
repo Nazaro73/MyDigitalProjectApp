@@ -1,3 +1,4 @@
+import 'package:bite/screens/mon_voyage.dart';
 import 'package:flutter/material.dart';
 import '../Widget/NavigationWidget.dart';
 import 'accueil_page.dart';

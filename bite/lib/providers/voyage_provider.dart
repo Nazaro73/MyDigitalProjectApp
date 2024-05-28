@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/Voyage.dart';
-import '../models/user.dart';
-import '../models/activite.dart';
+import '../models/User.dart';
+import '../models/Activite.dart';
 
 final voyageProvider = StateNotifierProvider<VoyageNotifier, List<Voyage>>((ref) {
   return VoyageNotifier();
