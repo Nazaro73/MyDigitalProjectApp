@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AndroidLayouts">
+    <shared>
+      <config />
+    </shared>
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="27d7dbdd-6f72-4958-8f10-9812b3237867" name="Changes" comment="v0.5 is ok">
+      <change beforePath="$PROJECT_DIR$/../MyDigitalProjectFlutter/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../MyDigitalProjectFlutter/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MyDigitalProjectFlutter/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../MyDigitalProjectFlutter/android/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MyDigitalProjectFlutter/android/app/src/main/kotlin/com/example/bite/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../MyDigitalProjectFlutter/android/app/src/main/kotlin/com/example/MyDigitalProjectFlutter/MainActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../cours-flutter-tp-interactive-widgets" beforeDir="false" afterPath="$PROJECT_DIR$/../cours-flutter-tp-interactive-widgets" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../flutter_tp_quizz" beforeDir="false" afterPath="$PROJECT_DIR$/../flutter_tp_quizz" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Dart File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2biRxsrD6MXvrQaFnPTXW5A2Wrc" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "com.google.services.firebase.aqiPopupShown": "true",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "master",
+    "io.flutter.reload.alreadyRun": "true",
+    "last_opened_file_path": "C:/Users/XDabd/AndroidStudioProjects/MyDigitalProjectFlutter",
+    "show.migrate.to.gradle.popup": "false"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\XDabd\AndroidStudioProjects\bite\lib\Widget\Selector" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="main.dart" type="FlutterRunConfigurationType" factoryName="Flutter">
+      <option name="filePath" value="$PROJECT_DIR$/lib/main.dart" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="27d7dbdd-6f72-4958-8f10-9812b3237867" name="Changes" comment="" />
+      <created>1706696166492</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1706696166492</updated>
+    </task>
+    <task id="LOCAL-00001" summary="first commit nav ok">
+      <option name="closed" value="true" />
+      <created>1714430195574</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1714430195574</updated>
+    </task>
+    <task id="LOCAL-00002" summary="v0.5 is ok">
+      <option name="closed" value="true" />
+      <created>1716912903346</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1716912903346</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="first commit nav ok" />
+    <MESSAGE value="v0.5 is ok" />
+    <option name="LAST_COMMIT_MESSAGE" value="v0.5 is ok" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/screens/creer_voyage_page.dart</url>
+          <line>1</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
